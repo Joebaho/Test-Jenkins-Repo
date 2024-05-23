@@ -1,0 +1,25 @@
+---
+- name: Install SonarQube Server
+  hosts: sonarqube_vm
+  become: true
+  tasks:
+    - name: Install OpenJDK 11
+      apt:
+        name: openjdk-11-jdk
+        state: present
+    - name: Download SonarQube    
+      get_url:
+         url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.9.1.44547.zip
+         dest: /opt/sonarqube.zip
+    - name: Unzip SonarQube
+      unarchive:
+        src: /opt/sonarqube.zip
+        dest: /opt/
+        remote_src: yes
+    - name: Set Permissions
+      file:
+        path: /opt/sonarqube
+        state: directory
+        mode: '0755'
+    - name: Start SonarQube Service
+      command: /opt/sonarqube/bin/linux-x86-64/sonar.sh start

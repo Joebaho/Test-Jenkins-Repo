@@ -1,0 +1,25 @@
+---
+- name: Install Nexus Repository Manager
+  hosts: nexus_vm
+  become: true
+  tasks:
+    - name: Install OpenJDK 8
+      apt:
+        name: openjdk-8-jdk
+        state: present
+    - name: Download Nexus
+      get_url:
+        url: https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+        dest: /opt/nexus.tar.gz
+    - name: Unzip Nexus
+      unarchive:
+        src: /opt/nexus.tar.gz
+        dest: /opt/
+        remote_src: yes
+    - name: Set Permissions
+      file:
+        path: /opt/nexus
+        state: directory
+        mode: '0755'
+    - name: Start Nexus Service
+      command: /opt/nexus/bin/nexus start

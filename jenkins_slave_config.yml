@@ -1,0 +1,9 @@
+---
+- name: Configure Jenkins Slave
+  hosts: jenkins_slave_vm
+  become: true
+  tasks:
+   - name: Install Java
+     apt:
+       name: default-jr
+       state: present 

@@ -1,0 +1,23 @@
+---
+- name: Install Jenkins
+  hosts: jenkins_vm
+  become: true
+  tasks:
+    - name: Add Jenkins Repository
+      apt_repository:
+        repo: deb https://pkg.jenkins.io/debian-stable binary/
+      state: present
+      update_cache: yes
+    - name: Import Jenkins Repository GPG Key
+      apt_key:
+        url: https://pkg.jenkins.io/debian/jenkins.io.key
+      state: present
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+    - name: Start Jenkins Service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
